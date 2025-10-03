@@ -19,7 +19,7 @@ public class MainMenu {
         while (flag){
             String option = JOptionPane.showInputDialog(null, "Choose an option", "User menu", JOptionPane.QUESTION_MESSAGE, null, options, options[0]).toString();
             switch (option){
-                case "All users":
+                case "User":
                     userMenu.userMenu();
                     break;
                 case "Exit":
