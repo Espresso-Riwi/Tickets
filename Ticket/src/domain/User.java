@@ -54,4 +54,9 @@ public class User {
     public void setRol(String rol) {
         this.rol = rol;
     }
+
+    @Override
+    public String toString() {
+        return "ID: "+user_id+"\nName: "+name+"\nDNI: "+dni+"\nEmail: "+email+"\nRol: "+rol;
+    }
 }
