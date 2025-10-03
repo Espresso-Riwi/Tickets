@@ -3,6 +3,7 @@ import config.DBConnection;
 import controller.UserController;
 import dao.User.UserIMP;
 import service.UserService;
+import view.MainMenu;
 import view.User.UserMenu;
 import view.User.UserView;
 
@@ -23,5 +24,7 @@ public class Main {
         UserController userController = new UserController(userService);
         UserView userView = new UserView(userController);
         UserMenu userMenu = new UserMenu(userView);
+        MainMenu mainMenu = new MainMenu(userMenu);
+        mainMenu.menu();
     }
 }
