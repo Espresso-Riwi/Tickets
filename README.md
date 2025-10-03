@@ -5,7 +5,7 @@
 ## Entities
 
 - **User**: Represents a user in the system.
-  - Attributes: `user_id`, `name`, `dni`, `role`
+  - Attributes: `user_id`, `name`, `dni`, `email`, `role`
   - Roles: `reporter`, `assignee`
   - Relationships: Can report multiple `Issues`, can be assigned to multiple `Issues`.
   - methods: I don't know
@@ -15,7 +15,7 @@
   - primary key: `user_id`
 -------
 - **Ticket**: Represent a ticket in the system.
-- Attributes: `ticket_id`, `title`, `description`, `status`, `priority`, `reporter_id`, `assignee_id`, `category`
+- Attributes: `ticket_id`, `title`, `description`, `status`, `priority`, `id_reporter`, `id_assignee`, `id_category`
   - Statuses: `open`, `in_progress`, `closed`
   - Priorities: `low`, `medium`, `high`
   - Relationships: Reported by one `User` (reporter), assigned to one `User` (assignee), can have multiple `Comments`.
@@ -27,7 +27,7 @@
   - foreign keys: `reporter_id` references `User(user_id)`, `assignee_id` references `User(user_id)`
 -------
 - **Comment**: Represents a comment on a ticket.
-  - Attributes: `comment_id`, `ticket_id`, `user_id`, `content`, `date_created`, `time_created`
+  - Attributes: `comment_id`, `ticket_id`, `user_id`, `content`
   - Relationships: Belongs to one `Ticket`, made by one `User`.
   - methods: I don't know
   - constraints: `content` must not be empty.
@@ -36,6 +36,53 @@
   - primary key: `comment_id`
   - foreign keys: `ticket_id` references `Ticket(ticket_id)`, `user_id` references `User(user_id)`
 -------
+**Category**: Represents a category for tickets.
+  - Attributes: `category_id`, `name`, `description`
+  - Relationships: Can be associated with multiple `Tickets`.
+  - methods: I don't know
+  - constraints: `name` must be unique and not empty.
+  - validations: `description` can be optional.
+  - indexes: `category_id`
+  - primary key: `category_id`
+
+```sql
+CREATE TABLE user(
+    user_id INT PRIMARY KEY auto_increment,
+    name VARCHAR(255),
+    dni VARCHAR(60) unique not null,
+    email VARCHAR(255) unique not null,
+    rol ENUM('reporter', 'assignee') NOT NULL
+);
+
+CREATE TABLE category(
+    category_id INT PRIMARY KEY auto_increment,
+    name VARCHAR(50) unique not null,
+    description TEXT
+);
+
+CREATE TABLE ticket(
+    ticket_id INT PRIMARY KEY auto_increment,
+    title VARCHAR(60),
+    description TEXT,
+    status ENUM('open', 'in_progress', 'closed') NOT NULL,
+    priority ENUM('low', 'medium', 'high'),
+    reporter_id INT,
+    assignee_id INT,
+    category_id INT,
+    FOREIGN KEY (reporter_id) REFERENCES user(user_id) ON DELETE SET NULL,
+    FOREIGN KEY (assignee_id) REFERENCES user(user_id) ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE SET NULL
+);
+
+CREATE TABLE comment(
+    comment_id INT PRIMARY KEY auto_increment,
+    ticket_id INT,
+    user_id INT,
+    content TEXT not null,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE SET NULL,
+    FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id) ON DELETE SET NULL
+);
+```
 
 ## Relationships
 - A `User` can report multiple `Tickets` (one-to-many relationship).
