@@ -13,8 +13,24 @@ public class MainMenu {
     }
 
     public void menu(){
-        String[] options = {"User"};
-        String option = JOptionPane.showInputDialog(null, "Choose an option", "User menu", JOptionPane.QUESTION_MESSAGE, null, options, options[0]).toString();
+        String[] options = {"User", "Exit"};
+        boolean flag = true;
+
+        while (flag){
+            String option = JOptionPane.showInputDialog(null, "Choose an option", "User menu", JOptionPane.QUESTION_MESSAGE, null, options, options[0]).toString();
+            switch (option){
+                case "All users":
+                    userMenu.userMenu();
+                    break;
+                case "Exit":
+                    flag = false;
+                    break;
+
+            }
+        }
+
+
+
     }
 
 
