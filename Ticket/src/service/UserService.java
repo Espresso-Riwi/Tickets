@@ -15,8 +15,11 @@ public class UserService {
 
     public List<User> getAllUsers(){
         List<User> userList = userIMP.getAllUsers();
-        //Logic if we need.
-        return userList;
+        if (userList.isEmpty()){
+            return null;
+        }else{
+            return userList;
+        }
     }
 
     public User getUserByDni(String dni){
@@ -25,15 +28,15 @@ public class UserService {
         return user;
     }
 
-    public void createUser(String name, String dni, String email, String rol){
+    public void createUser(User user){
         //Validation logic
 
-        if (userIMP.getUserByDni(dni) == null){
+        if (userIMP.getUserByDni(user.getDni()) == null){
             //error message here
         }else{
-            if (Validator.isValidName(name) || Validator.isInteger(dni) || Validator.isPositive(dni)
-                    || Validator.isValidEmail(email) || Validator.isValidName(rol)){
-                userIMP.createUser(name, dni, email, rol);
+            if (Validator.isValidName(user.getName()) || Validator.isInteger(user.getDni()) || Validator.isPositive(user.getDni())
+                    || Validator.isValidEmail(user.getEmail()) || Validator.isValidName(user.getRol())){
+                userIMP.createUser(user.getName(), user.getDni(), user.getEmail(), user.getRol());
             }
         }
 
