@@ -1,6 +1,7 @@
 package app;
 import config.DBConnection;
 import dao.User.UserIMP;
+import service.UserService;
 
 import java.sql.SQLException;
 
@@ -15,8 +16,6 @@ public class Main {
             e.printStackTrace();
         }
 
-
-
-
+        UserService userService = new UserService(userIMP);
     }
 }
