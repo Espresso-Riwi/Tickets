@@ -2,6 +2,7 @@ package controller;
 import domain.User;
 import service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class UserController {
@@ -13,28 +14,22 @@ public class UserController {
     }
 
     public List<User> getAllUsers(){
-        List<User> userList = userService.getAllUsers();
-        if (userList == null){
-            //joptionPaneMessage
-        }else{
-            return  userList;
-        }
-
-        return null;
+        return userService.getAllUsers();
     }
 
-    public User getUserByDni(String dni){
+    public HashMap<Boolean, User> getUserByDni(String dni){
         User user = userService.getUserByDni(dni);
+        HashMap<Boolean, User> userHashMap = new HashMap<>();
         if (user == null){
-            //joptionPaneMessage
+            userHashMap.put(false, null);
+            return userHashMap;
         }else{
-            return user;
+            userHashMap.put(true, user);
+            return userHashMap;
         }
-
-        return null;
     }
 
-    public void createUser(User user){
-        userService.createUser(user);
+    public String createUser(User user){
+        return userService.createUser(user);
     }
 }

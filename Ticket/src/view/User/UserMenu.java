@@ -19,8 +19,11 @@ public class UserMenu {
                 userView.showAllUsers();
                 break;
             case "User by id":
+                userView.showUserByDni();
                 break;
             case "Create user":
+                userView.createUser();
+
                 break;
         }
     }

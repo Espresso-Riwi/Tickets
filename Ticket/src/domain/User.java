@@ -15,6 +15,13 @@ public class User {
         setRol(rol);
     }
 
+    public User(String name, String dni, String email, String rol) {
+        setName(name);
+        setDni(dni);
+        setEmail(email);
+        setRol(rol);
+    }
+
     public int getUser_id() {
         return user_id;
     }

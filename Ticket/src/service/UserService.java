@@ -28,23 +28,22 @@ public class UserService {
         return user;
     }
 
-    public void createUser(User user){
-        //Validation logic
+    public String createUser(User user){
 
-        if (userIMP.getUserByDni(user.getDni()) == null){
-            //error message here
+        if (userIMP.getUserByDni(user.getDni()) != null){
+            return "The user already exist";
         }else{
-            if (Validator.isValidName(user.getName()) || Validator.isInteger(user.getDni()) || Validator.isPositive(user.getDni())
-                    || Validator.isValidEmail(user.getEmail()) || Validator.isValidName(user.getRol())){
-                userIMP.createUser(user.getName(), user.getDni(), user.getEmail(), user.getRol());
+            if (userIMP.getUserByDni(user.getDni()) == null){
+                //validate  inputs
+                if (Validator.isValidName(user.getName()) || Validator.isInteger(user.getDni()) || Validator.isPositive(user.getDni())
+                        || Validator.isValidEmail(user.getEmail()) || Validator.isValidName(user.getRol())){
+                    userIMP.createUser(user.getName(), user.getDni(), user.getEmail(), user.getRol());
+                    return "User created successfully";
+                }else{
+                    return "Invalid user data";
+                }
             }
         }
-
-
-
+        return null;
     }
-
-
-
-
 }
