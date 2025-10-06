@@ -1,6 +1,7 @@
 package view.Ticket;
 
 import controller.TicketController;
+import domain.Category;
 import domain.Ticket;
 import domain.User;
 import view.ViewMessages;
@@ -102,4 +103,19 @@ public class TicketView {
         }
         ViewMessages.showInfoMessage(message, "Assignee Tickets");
     }
+
+    public void showTopCategories() {
+        String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Top Categories");
+        List<Category> categories = ticketController.getTopCategories(dni);
+        if (categories == null || categories.isEmpty()) {
+            ViewMessages.showInfoMessage("No categories found or user not valid.", "Top Categories");
+            return;
+        }
+        String message = "";
+        for (Category c : categories) {
+            message += "Category: " + c.getCategoryName() + ", Tickets: " + c.getCount() + "\n";
+        }
+        ViewMessages.showInfoMessage(message, "Top 3 Categories");
+    }
+
 }

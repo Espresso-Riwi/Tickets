@@ -1,7 +1,7 @@
 package controller;
 
+import domain.Category;
 import domain.Ticket;
-import domain.User;
 import service.TicketService;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +48,10 @@ public class TicketController {
 
     public List<Ticket> getTicketsByAssignee(String dni) {
         return ticketService.getTicketsByAssignee(dni);
+    }
+
+    public List<Category> getTopCategories(String dni) {
+        return ticketService.getTopCategories(dni);
     }
 
 }

@@ -1,5 +1,6 @@
 package dao.Ticket;
 
+import domain.Category;
 import domain.Ticket;
 import java.sql.*;
 import java.util.ArrayList;
@@ -190,6 +191,34 @@ public class TicketIMP implements TicketRepository {
         }
         return ticketList;
     }
+
+    public List<Category> getTopCategories(int limit) {
+        String sql = "SELECT c.category_id, c.name AS category_name, COUNT(t.ticket_id) AS ticket_count " +
+                "FROM category c " +
+                "LEFT JOIN ticket t ON c.category_id = t.category_id " +
+                "GROUP BY c.category_id, c.name " +
+                "ORDER BY ticket_count DESC " +
+                "LIMIT ?";
+        List<Category> topCategories = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
+            stmt.setInt(1, limit);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                topCategories.add(new Category(
+                        rs.getInt("category_id"),
+                        rs.getString("category_name"),
+                        rs.getInt("ticket_count")
+                ));
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try { connection.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        }
+        return topCategories;
+    }
+
 
 
 }

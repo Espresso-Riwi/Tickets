@@ -2,6 +2,7 @@ package service;
 
 import dao.Ticket.TicketIMP;
 import dao.User.UserIMP;
+import domain.Category;
 import domain.Ticket;
 import domain.User;
 import java.util.List;
@@ -93,5 +94,14 @@ public class TicketService {
         }
         List<Ticket> tickets = ticketIMP.getTicketsByAssignee(assignee.getUser_id());
         return tickets.isEmpty() ? null : tickets;
+    }
+
+    public List<Category> getTopCategories(String dni) {
+        User user = userIMP.getUserByDni(dni);
+        if (user == null) {
+            return null;
+        }
+        List<Category> categories = ticketIMP.getTopCategories(3);
+        return categories.isEmpty() ? null : categories;
     }
 }
