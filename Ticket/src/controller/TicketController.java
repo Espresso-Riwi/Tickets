@@ -30,7 +30,11 @@ public class TicketController {
         }
     }
 
-    public String createTicket(Ticket ticket, User user) {
-        return ticketService.createTicket(ticket, user);
+    public String createTicket(Ticket ticket, String dni) {
+        return ticketService.createTicket(ticket, dni);
+    }
+
+    public String assignTicket(int ticketId, int assigneeId, String dni) {
+        return ticketService.assignTicket(ticketId, assigneeId, dni);
     }
 }

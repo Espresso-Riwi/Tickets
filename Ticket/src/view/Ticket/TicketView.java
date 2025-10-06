@@ -1,0 +1,61 @@
+package view.Ticket;
+
+import controller.TicketController;
+import domain.Ticket;
+import domain.User;
+import view.ViewMessages;
+import javax.swing.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class TicketView {
+
+    private TicketController ticketController;
+
+    public TicketView(TicketController ticketController) {
+        this.ticketController = ticketController;
+    }
+
+    public void showAllTickets() {
+        List<Ticket> ticketList = ticketController.getAllTickets();
+        String message = "";
+        for (Ticket t : ticketList) {
+            message += t.toString() + "\n\n";
+        }
+        ViewMessages.showInfoMessage(message, "All Tickets");
+    }
+
+    public void showTicketById() {
+        String idInput = ViewMessages.showQuestionMessage("Enter the Ticket ID:", "Ticket Information");
+        int id = Integer.parseInt(idInput);
+        HashMap<Boolean, Ticket> ticketHashMap = ticketController.getTicketById(id);
+
+        for (Map.Entry<Boolean, Ticket> entry : ticketHashMap.entrySet()) {
+            if (!entry.getKey()) {
+                ViewMessages.showInfoMessage("There is no ticket with that ID", "Ticket Info");
+            } else {
+                ViewMessages.showInfoMessage(entry.getValue().toString(), "Ticket Info");
+            }
+        }
+    }
+
+    public void createTicket() {
+        String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Reporter Validation");
+        String title = ViewMessages.showQuestionMessage("Enter ticket title:", "Ticket Information");
+        String description = ViewMessages.showQuestionMessage("Enter ticket description:", "Ticket Information");
+        String categoryIdStr = ViewMessages.showQuestionMessage("Enter category ID:", "Ticket Information");
+        int categoryId = Integer.parseInt(categoryIdStr);
+        Ticket ticket = new Ticket(title, description, "open", "medium", 0, 0, categoryId);
+        String result = ticketController.createTicket(ticket, dni);
+        ViewMessages.showInfoMessage(result, "Information");
+    }
+
+    public void assignTicket() {
+        String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Reporter Validation");
+        int ticketId = Integer.parseInt(ViewMessages.showQuestionMessage("Enter ticket ID to assign:", "Assign Ticket"));
+        int assigneeId = Integer.parseInt(ViewMessages.showQuestionMessage("Enter assignee ID:", "Assign Ticket"));
+        String result = ticketController.assignTicket(ticketId, assigneeId, dni);
+        ViewMessages.showInfoMessage(result, "Information");
+    }
+}

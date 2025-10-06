@@ -1,16 +1,20 @@
 package service;
 
 import dao.Ticket.TicketIMP;
+import dao.User.UserIMP;
 import domain.Ticket;
 import domain.User;
 import java.util.List;
+import util.Validator;
 
 public class TicketService {
 
     private TicketIMP ticketIMP;
+    private UserIMP userIMP;
 
-    public TicketService(TicketIMP ticketIMP) {
+    public TicketService(TicketIMP ticketIMP, UserIMP userIMP) {
         this.ticketIMP = ticketIMP;
+        this.userIMP = userIMP;
     }
 
     public List<Ticket> getAllTickets() {
@@ -26,11 +30,36 @@ public class TicketService {
         return ticketIMP.getTicketById(ticketId);
     }
 
-    public String createTicket(Ticket ticket, User user) {
+    public String createTicket(Ticket ticket, String dni) {
+        User user = userIMP.getUserByDni(dni);
+        if (user == null) {
+            return "User not found";
+        }
         if (!user.getRol().equalsIgnoreCase("reporter")) {
             return "Only reporters can create tickets";
         }
-        ticketIMP.createTicket(ticket.getTitle(), ticket.getDescription(), ticket.getStatus(), ticket.getPriority(), ticket.getReporterId(), ticket.getAssigneeId(), ticket.getCategoryId());
-        return "Ticket created successfully";
+        if (Validator.isValidName(ticket.getTitle()) && Validator.isValidName(ticket.getDescription())) {
+            ticket.setReporterId(user.getUser_id());
+            ticketIMP.createTicket(ticket);
+            return "Ticket created successfully";
+        }
+        return "Invalid ticket data";
+    }
+
+
+    public String assignTicket(int ticketId, int assigneeId, String dni) {
+        User user = userIMP.getUserByDni(dni);
+        if (user == null) {
+            return "User not found";
+        }
+        if (!user.getRol().equalsIgnoreCase("reporter")) {
+            return "Only reporters can assign tickets";
+        }
+        Ticket ticket = ticketIMP.getTicketById(ticketId);
+        if (ticket == null) {
+            return "Ticket not found";
+        }
+        ticketIMP.assignTicket(ticketId, assigneeId);
+        return "Ticket assigned successfully";
     }
 }

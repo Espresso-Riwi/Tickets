@@ -1,19 +1,22 @@
 package view;
 
 import view.User.UserMenu;
+import view.Ticket.TicketMenu;
 
 import javax.swing.*;
 
 public class MainMenu {
 
     private UserMenu userMenu;
+    private TicketMenu ticketMenu;
 
-    public MainMenu(UserMenu userMenu){
+    public MainMenu(UserMenu userMenu, TicketMenu ticketMenu){
         this.userMenu = userMenu;
+        this.ticketMenu = ticketMenu;
     }
 
     public void menu(){
-        String[] options = {"User", "Exit"};
+        String[] options = {"User", "Ticket","Exit"};
         boolean flag = true;
 
         while (flag){
@@ -21,6 +24,9 @@ public class MainMenu {
             switch (option){
                 case "User":
                     userMenu.userMenu();
+                    break;
+                case "Ticket":
+                    ticketMenu.ticketMenu();
                     break;
                 case "Exit":
                     flag = false;

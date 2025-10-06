@@ -1,0 +1,33 @@
+package view.Ticket;
+
+import javax.swing.*;
+
+public class TicketMenu {
+
+    private TicketView ticketView;
+
+    public TicketMenu(TicketView ticketView) {
+        this.ticketView = ticketView;
+    }
+
+    public void ticketMenu() {
+        String[] options = {"All tickets", "Ticket by ID", "Create ticket", "Assign ticket"};
+        String option = JOptionPane.showInputDialog(null, "Choose an option", "Ticket menu", JOptionPane.QUESTION_MESSAGE, null, options, options[0]).toString();
+
+        switch (option) {
+            case "All tickets":
+                ticketView.showAllTickets();
+                break;
+            case "Ticket by ID":
+                ticketView.showTicketById();
+                break;
+            case "Create ticket":
+                ticketView.createTicket();
+                break;
+            case "Assign ticket":
+                ticketView.assignTicket();
+                break;
+        }
+    }
+}
+

@@ -70,24 +70,17 @@ public class TicketIMP implements TicketRepository {
     }
 
     @Override
-    public void createTicket(String title, String description, String status, String priority, int reporterId, Integer assigneeId, int categoryId) {
+    public void createTicket(Ticket ticket) {
         String sql = "INSERT INTO ticket(title, description, status, priority, reporter_id, assignee_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
-            stmt.setString(1, title);
-            stmt.setString(2, description);
-            stmt.setString(3, status);
-            stmt.setString(4, priority);
-            stmt.setInt(5, reporterId);
-
-            if (assigneeId != null) {
-                stmt.setInt(6, assigneeId);
-            } else {
-                stmt.setNull(6, Types.INTEGER);
-            }
-
-            stmt.setInt(7, categoryId);
+            stmt.setString(1, ticket.getTitle());
+            stmt.setString(2, ticket.getDescription());
+            stmt.setString(3, ticket.getStatus());
+            stmt.setString(4, ticket.getPriority());
+            stmt.setInt(5, ticket.getReporterId());
+            stmt.setInt(6, ticket.getAssigneeId());
+            stmt.setInt(7, ticket.getCategoryId());
             stmt.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -101,5 +94,19 @@ public class TicketIMP implements TicketRepository {
 
     @Override
     public void deleteTicket() {
+    }
+
+    @Override
+    public void assignTicket(int ticketId, int assigneeId) {
+        String sql = "UPDATE ticket SET assignee_id = ? WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
+            stmt.setInt(1, assigneeId);
+            stmt.setInt(2, ticketId);
+            stmt.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
