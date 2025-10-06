@@ -11,7 +11,7 @@ public class TicketMenu {
     }
 
     public void ticketMenu() {
-        String[] options = {"All tickets", "Ticket by ID", "Create ticket", "Assign ticket", "Update ticket status", "Search by status and category"};
+        String[] options = {"All tickets", "Ticket by ID", "Create ticket", "Assign ticket", "Update ticket status", "Search by status and category", "List tickets by assignee"};
         String option = JOptionPane.showInputDialog(null, "Choose an option", "Ticket menu", JOptionPane.QUESTION_MESSAGE, null, options, options[0]).toString();
 
         switch (option) {
@@ -32,6 +32,9 @@ public class TicketMenu {
                 break;
             case "Search by status and category":
                 ticketView.showTicketsByStatusAndCategory();
+                break;
+            case "List tickets by assignee":
+                ticketView.showTicketsByAssignee();
                 break;
         }
     }

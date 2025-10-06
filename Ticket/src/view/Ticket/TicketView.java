@@ -85,5 +85,21 @@ public class TicketView {
         ViewMessages.showInfoMessage(message, "Filtered Tickets");
     }
 
-
+    public void showTicketsByAssignee() {
+        String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Assignee Tickets");
+        List<Ticket> tickets = ticketController.getTicketsByAssignee(dni);
+        if (tickets == null || tickets.isEmpty()) {
+            ViewMessages.showInfoMessage("No tickets found or you do not have permission.", "Assignee Tickets");
+            return;
+        }
+        String message = "";
+        for (Ticket t : tickets) {
+            message += "ID: " + t.getTicketId() +
+                    ", Title: " + t.getTitle() +
+                    ", Status: " + t.getStatus() +
+                    ", Reporter: " + t.getReporterName() +
+                    ", Category: " + t.getCategoryName() + "\n\n";
+        }
+        ViewMessages.showInfoMessage(message, "Assignee Tickets");
+    }
 }

@@ -10,8 +10,10 @@ public class Ticket {
     private int reporterId;
     private Integer assigneeId;
     private int categoryId;
+    private String reporterName;
+    private String categoryName;
 
-    // Constructor completo
+
     public Ticket(int ticketId, String title, String description, String status, String priority, int reporterId, Integer assigneeId, int categoryId) {
         setTicketId(ticketId);
         setTitle(title);
@@ -31,6 +33,35 @@ public class Ticket {
         setReporterId(reporterId);
         setAssigneeId(assigneeId);
         setCategoryId(categoryId);
+    }
+
+    public Ticket(int ticketId, String title, String description, String status, String priority, int reporterId, Integer assigneeId, int categoryId, String reporterName, String categoryName) {
+        setTicketId(ticketId);
+        setTitle(title);
+        setDescription(description);
+        setStatus(status);
+        setPriority(priority);
+        setReporterId(reporterId);
+        setAssigneeId(assigneeId);
+        setCategoryId(categoryId);
+        setReporterName(reporterName);
+        setCategoryName(categoryName);
+    }
+
+    public String getReporterName() {
+        return reporterName;
+    }
+
+    public void setReporterName(String reporterName) {
+        this.reporterName = reporterName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public int getTicketId() {

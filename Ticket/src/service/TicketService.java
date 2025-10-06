@@ -86,5 +86,12 @@ public class TicketService {
         return tickets.isEmpty() ? null : tickets;
     }
 
-
+    public List<Ticket> getTicketsByAssignee(String dni) {
+        User assignee = userIMP.getUserByDni(dni);
+        if (assignee == null || !assignee.getRol().equalsIgnoreCase("assignee")) {
+            return null;
+        }
+        List<Ticket> tickets = ticketIMP.getTicketsByAssignee(assignee.getUser_id());
+        return tickets.isEmpty() ? null : tickets;
+    }
 }

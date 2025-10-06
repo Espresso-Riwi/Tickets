@@ -156,4 +156,40 @@ public class TicketIMP implements TicketRepository {
         return ticketList;
     }
 
+    public List<Ticket> getTicketsByAssignee(int assigneeId) {
+        String sql = "SELECT t.ticket_id, t.title, t.description, t.status, t.priority, t.reporter_id, t.assignee_id, t.category_id, " +
+                "r.name AS reporter_name, c.name AS category_name " +
+                "FROM ticket t " +
+                "LEFT JOIN user r ON t.reporter_id = r.user_id " +
+                "LEFT JOIN category c ON t.category_id = c.category_id " +
+                "WHERE t.assignee_id = ?";
+        List<Ticket> ticketList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
+            stmt.setInt(1, assigneeId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Ticket t = new Ticket(
+                        rs.getInt("ticket_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("status"),
+                        rs.getString("priority"),
+                        rs.getInt("reporter_id"),
+                        rs.getInt("assignee_id"),
+                        rs.getInt("category_id")
+                );
+                t.setReporterName(rs.getString("reporter_name"));
+                t.setCategoryName(rs.getString("category_name"));
+                ticketList.add(t);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try { connection.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        }
+        return ticketList;
+    }
+
+
 }

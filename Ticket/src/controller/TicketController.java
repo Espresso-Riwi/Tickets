@@ -46,4 +46,8 @@ public class TicketController {
         return ticketService.getTicketsByStatusAndCategory(dni, status, categoryId);
     }
 
+    public List<Ticket> getTicketsByAssignee(String dni) {
+        return ticketService.getTicketsByAssignee(dni);
+    }
+
 }
