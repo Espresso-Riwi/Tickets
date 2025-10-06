@@ -37,4 +37,8 @@ public class TicketController {
     public String assignTicket(int ticketId, int assigneeId, String dni) {
         return ticketService.assignTicket(ticketId, assigneeId, dni);
     }
+
+    public String updateTicketStatus(int ticketId, String dni, String newStatus) {
+        return ticketService.updateTicketStatus(ticketId, dni, newStatus);
+    }
 }

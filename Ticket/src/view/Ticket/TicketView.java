@@ -58,4 +58,14 @@ public class TicketView {
         String result = ticketController.assignTicket(ticketId, assigneeId, dni);
         ViewMessages.showInfoMessage(result, "Information");
     }
+
+    public void updateTicketStatus() {
+        String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Ticket Update");
+        String ticketIdStr = ViewMessages.showQuestionMessage("Enter the Ticket ID:", "Ticket Update");
+        String newStatus = ViewMessages.showQuestionMessage("Enter the new status (open, in_progress, closed):", "Ticket Update");
+        int ticketId = Integer.parseInt(ticketIdStr);
+        String result = ticketController.updateTicketStatus(ticketId, dni, newStatus);
+        ViewMessages.showInfoMessage(result, "Ticket Update");
+    }
+
 }

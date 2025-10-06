@@ -109,4 +109,22 @@ public class TicketIMP implements TicketRepository {
             e.printStackTrace();
         }
     }
+
+    public String updateStatus(int ticketId, String newStatus) {
+        String sql = "UPDATE ticket SET status = ? WHERE ticket_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, ticketId);
+            int rows = ps.executeUpdate();
+            connection.commit();
+            return rows > 0 ? "Ticket status updated successfully." : "No ticket found with that ID.";
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return "Error updating ticket status: " + e.getMessage();
+        }
+    }
 }

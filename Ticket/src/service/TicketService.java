@@ -46,7 +46,6 @@ public class TicketService {
         return "Invalid ticket data";
     }
 
-
     public String assignTicket(int ticketId, int assigneeId, String dni) {
         User user = userIMP.getUserByDni(dni);
         if (user == null) {
@@ -62,4 +61,20 @@ public class TicketService {
         ticketIMP.assignTicket(ticketId, assigneeId);
         return "Ticket assigned successfully";
     }
+
+    public String updateTicketStatus(int ticketId, String dni, String newStatus) {
+        User assignee = userIMP.getUserByDni(dni);
+        if (assignee == null || !assignee.getRol().equalsIgnoreCase("assignee")) {
+            return "You do not have permission to change the ticket status.";
+        }
+        Ticket ticket = ticketIMP.getTicketById(ticketId);
+        if (ticket == null) {
+            return "Ticket not found.";
+        }
+        if (ticket.getAssigneeId() != assignee.getUser_id()) {
+            return "You can only update tickets assigned to you.";
+        }
+        return ticketIMP.updateStatus(ticketId, newStatus);
+    }
+
 }
