@@ -9,5 +9,7 @@ public interface TicketRepository {
     void createTicket(Ticket ticket);
     void updateTicket();
     void deleteTicket();
-    void assignTicket(int ticketId, int assigneeId);
+    void assignTicket(int ticketId, String assigneeDni);
+    Integer getCategoryIdByName(String categoryName);
+    List<Ticket> getTicketsByStatusAndCategoryName(String status, String categoryName);
 }

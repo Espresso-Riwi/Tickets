@@ -30,20 +30,20 @@ public class TicketController {
         }
     }
 
-    public String createTicket(Ticket ticket, String dni) {
-        return ticketService.createTicket(ticket, dni);
+    public String createTicket(Ticket ticket, String dni, String categoryName) {
+        return ticketService.createTicket(ticket, dni, categoryName);
     }
 
-    public String assignTicket(int ticketId, int assigneeId, String dni) {
-        return ticketService.assignTicket(ticketId, assigneeId, dni);
+    public String assignTicket(int ticketId, String assigneeDni, String reporterDni) {
+        return ticketService.assignTicket(ticketId, assigneeDni, reporterDni);
     }
 
     public String updateTicketStatus(int ticketId, String dni, String newStatus) {
         return ticketService.updateTicketStatus(ticketId, dni, newStatus);
     }
 
-    public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, int categoryId) {
-        return ticketService.getTicketsByStatusAndCategory(dni, status, categoryId);
+    public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, String categoryName) {
+        return ticketService.getTicketsByStatusAndCategory(dni, status, categoryName);
     }
 
     public List<Ticket> getTicketsByAssignee(String dni) {

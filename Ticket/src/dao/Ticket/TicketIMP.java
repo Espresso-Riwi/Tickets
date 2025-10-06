@@ -72,7 +72,7 @@ public class TicketIMP implements TicketRepository {
 
     @Override
     public void createTicket(Ticket ticket) {
-        String sql = "INSERT INTO ticket(title, description, status, priority, reporter_id, assignee_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ticket(title, description, status, priority, reporter_id, category_id) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
             stmt.setString(1, ticket.getTitle());
@@ -80,8 +80,7 @@ public class TicketIMP implements TicketRepository {
             stmt.setString(3, ticket.getStatus());
             stmt.setString(4, ticket.getPriority());
             stmt.setInt(5, ticket.getReporterId());
-            stmt.setInt(6, ticket.getAssigneeId());
-            stmt.setInt(7, ticket.getCategoryId());
+            stmt.setInt(6, ticket.getCategoryId());
             stmt.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -98,15 +97,25 @@ public class TicketIMP implements TicketRepository {
     }
 
     @Override
-    public void assignTicket(int ticketId, int assigneeId) {
-        String sql = "UPDATE ticket SET assignee_id = ? WHERE ticket_id = ?";
+    public void assignTicket(int ticketId, String assigneeDni) {
+        String sql = "UPDATE ticket SET assignee_id = (SELECT user_id FROM user WHERE dni = ?) WHERE ticket_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
-            stmt.setInt(1, assigneeId);
+            stmt.setString(1, assigneeDni);
             stmt.setInt(2, ticketId);
-            stmt.executeUpdate();
-            connection.commit();
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                connection.commit();
+            } else {
+                connection.rollback();
+            }
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
     }
@@ -219,6 +228,60 @@ public class TicketIMP implements TicketRepository {
         return topCategories;
     }
 
+    @Override
+    public Integer getCategoryIdByName(String categoryName) {
+        String sql = "SELECT category_id FROM category WHERE name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
+            stmt.setString(1, categoryName);
+            ResultSet rs = stmt.executeQuery();
 
+            if (rs.next()) {
+                connection.commit();
+                return rs.getInt("category_id");
+            } else {
+                connection.commit();
+                return null; // Category not found
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    @Override
+    public List<Ticket> getTicketsByStatusAndCategoryName(String status, String categoryName) {
+        String sql = "SELECT t.* FROM ticket t " +
+                    "INNER JOIN category c ON t.category_id = c.category_id " +
+                    "WHERE t.status = ? AND c.name = ?";
+        List<Ticket> ticketList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
+            stmt.setString(1, status);
+            stmt.setString(2, categoryName);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ticketList.add(new Ticket(
+                        rs.getInt("ticket_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("status"),
+                        rs.getString("priority"),
+                        rs.getInt("reporter_id"),
+                        rs.getObject("assignee_id") != null ? rs.getInt("assignee_id") : null,
+                        rs.getInt("category_id")
+                ));
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try { connection.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        }
+        return ticketList;
+    }
 }

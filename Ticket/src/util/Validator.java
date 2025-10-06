@@ -36,4 +36,13 @@ public class Validator {
     public static boolean isValidEmail(String string){
         return string.matches(REGEX_VALIDEMAIL);
     }
+
+    public static boolean isValidTicketStatus(String status) {
+        if (status == null) {
+            return false;
+        }
+        return status.equalsIgnoreCase("open") ||
+               status.equalsIgnoreCase("in_progress") ||
+               status.equalsIgnoreCase("closed");
+    }
 }

@@ -20,18 +20,14 @@ public class TicketService {
 
     public List<Ticket> getAllTickets() {
         List<Ticket> ticketList = ticketIMP.getAllTickets();
-        if (ticketList.isEmpty()) {
-            return null;
-        } else {
-            return ticketList;
-        }
+        return ticketList;
     }
 
     public Ticket getTicketById(int ticketId) {
         return ticketIMP.getTicketById(ticketId);
     }
 
-    public String createTicket(Ticket ticket, String dni) {
+    public String createTicket(Ticket ticket, String dni, String categoryName) {
         User user = userIMP.getUserByDni(dni);
         if (user == null) {
             return "User not found";
@@ -39,31 +35,53 @@ public class TicketService {
         if (!user.getRol().equalsIgnoreCase("reporter")) {
             return "Only reporters can create tickets";
         }
-        if (Validator.isValidName(ticket.getTitle()) && Validator.isValidName(ticket.getDescription())) {
+
+        Integer categoryId = ticketIMP.getCategoryIdByName(categoryName);
+        if (categoryId == null) {
+            return "Category not found";
+        }
+
+        if (Validator.isValidName(ticket.getTitle())) {
             ticket.setReporterId(user.getUser_id());
+            ticket.setCategoryId(categoryId); // Asignar el ID encontrado
+            System.out.println(user.getUser_id());
             ticketIMP.createTicket(ticket);
             return "Ticket created successfully";
         }
         return "Invalid ticket data";
     }
 
-    public String assignTicket(int ticketId, int assigneeId, String dni) {
-        User user = userIMP.getUserByDni(dni);
-        if (user == null) {
-            return "User not found";
+    public String assignTicket(int ticketId, String assigneeDni, String reporterDni) {
+        User reporter = userIMP.getUserByDni(reporterDni);
+        if (reporter == null) {
+            return "Reporter not found";
         }
-        if (!user.getRol().equalsIgnoreCase("reporter")) {
+        if (!reporter.getRol().equalsIgnoreCase("reporter")) {
             return "Only reporters can assign tickets";
         }
+
+        User assignee = userIMP.getUserByDni(assigneeDni);
+        if (assignee == null) {
+            return "Assignee not found";
+        }
+        if (!assignee.getRol().equalsIgnoreCase("assignee")) {
+            return "User is not an assignee";
+        }
+
         Ticket ticket = ticketIMP.getTicketById(ticketId);
         if (ticket == null) {
             return "Ticket not found";
         }
-        ticketIMP.assignTicket(ticketId, assigneeId);
+
+        ticketIMP.assignTicket(ticketId, assigneeDni);
         return "Ticket assigned successfully";
     }
 
     public String updateTicketStatus(int ticketId, String dni, String newStatus) {
+        if (!Validator.isValidTicketStatus(newStatus)) {
+            return "Invalid status. Valid statuses are: open, in_progress, closed";
+        }
+
         User assignee = userIMP.getUserByDni(dni);
         if (assignee == null || !assignee.getRol().equalsIgnoreCase("assignee")) {
             return "You do not have permission to change the ticket status.";
@@ -78,12 +96,14 @@ public class TicketService {
         return ticketIMP.updateStatus(ticketId, newStatus);
     }
 
-    public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, int categoryId) {
+    public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, String categoryName) {
         User user = userIMP.getUserByDni(dni);
-        if (user == null || !user.getRol().equalsIgnoreCase("operator")) {
+
+        if (!Validator.isValidTicketStatus(status)) {
             return null;
         }
-        List<Ticket> tickets = ticketIMP.getTicketsByStatusAndCategory(status, categoryId);
+
+        List<Ticket> tickets = ticketIMP.getTicketsByStatusAndCategoryName(status, categoryName);
         return tickets.isEmpty() ? null : tickets;
     }
 

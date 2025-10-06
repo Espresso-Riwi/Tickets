@@ -20,11 +20,16 @@ public class TicketView {
 
     public void showAllTickets() {
         List<Ticket> ticketList = ticketController.getAllTickets();
-        String message = "";
-        for (Ticket t : ticketList) {
-            message += t.toString() + "\n\n";
+        if (ticketList.isEmpty()){
+            ViewMessages.showInfoMessage("There is no tickets yet", "All tickets");
+        }else {
+            String message = "";
+            for (Ticket t : ticketList) {
+                message += t.toString() + "\n\n";
+            }
+            ViewMessages.showInfoMessage(message, "All Tickets");
         }
-        ViewMessages.showInfoMessage(message, "All Tickets");
+
     }
 
     public void showTicketById() {
@@ -45,18 +50,17 @@ public class TicketView {
         String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Reporter Validation");
         String title = ViewMessages.showQuestionMessage("Enter ticket title:", "Ticket Information");
         String description = ViewMessages.showQuestionMessage("Enter ticket description:", "Ticket Information");
-        String categoryIdStr = ViewMessages.showQuestionMessage("Enter category ID:", "Ticket Information");
-        int categoryId = Integer.parseInt(categoryIdStr);
-        Ticket ticket = new Ticket(title, description, "open", "medium", 0, 0, categoryId);
-        String result = ticketController.createTicket(ticket, dni);
+        String categoryName = ViewMessages.showQuestionMessage("Enter category name:", "Ticket Information");
+        Ticket ticket = new Ticket(title, description, "open", "medium", 0, 0, 0); // categoryId se asignará en el service
+        String result = ticketController.createTicket(ticket, dni, categoryName);
         ViewMessages.showInfoMessage(result, "Information");
     }
 
     public void assignTicket() {
-        String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Reporter Validation");
+        String reporterDni = ViewMessages.showQuestionMessage("Enter your DNI:", "Reporter Validation");
         int ticketId = Integer.parseInt(ViewMessages.showQuestionMessage("Enter ticket ID to assign:", "Assign Ticket"));
-        int assigneeId = Integer.parseInt(ViewMessages.showQuestionMessage("Enter assignee ID:", "Assign Ticket"));
-        String result = ticketController.assignTicket(ticketId, assigneeId, dni);
+        String assigneeDni = ViewMessages.showQuestionMessage("Enter assignee DNI:", "Assign Ticket");
+        String result = ticketController.assignTicket(ticketId, assigneeDni, reporterDni);
         ViewMessages.showInfoMessage(result, "Information");
     }
 
@@ -72,9 +76,8 @@ public class TicketView {
     public void showTicketsByStatusAndCategory() {
         String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Operator Validation");
         String status = ViewMessages.showQuestionMessage("Enter ticket status (open, in_progress, closed):", "Filter Tickets");
-        String categoryIdStr = ViewMessages.showQuestionMessage("Enter category ID:", "Filter Tickets");
-        int categoryId = Integer.parseInt(categoryIdStr);
-        List<Ticket> tickets = ticketController.getTicketsByStatusAndCategory(dni, status, categoryId);
+        String categoryName = ViewMessages.showQuestionMessage("Enter category name:", "Filter Tickets");
+        List<Ticket> tickets = ticketController.getTicketsByStatusAndCategory(dni, status, categoryName);
         if (tickets == null || tickets.isEmpty()) {
             ViewMessages.showInfoMessage("No tickets found with that status and category.", "Filter Tickets");
             return;
