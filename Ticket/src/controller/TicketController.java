@@ -41,4 +41,9 @@ public class TicketController {
     public String updateTicketStatus(int ticketId, String dni, String newStatus) {
         return ticketService.updateTicketStatus(ticketId, dni, newStatus);
     }
+
+    public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, int categoryId) {
+        return ticketService.getTicketsByStatusAndCategory(dni, status, categoryId);
+    }
+
 }

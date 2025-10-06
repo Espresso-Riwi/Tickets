@@ -77,4 +77,14 @@ public class TicketService {
         return ticketIMP.updateStatus(ticketId, newStatus);
     }
 
+    public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, int categoryId) {
+        User user = userIMP.getUserByDni(dni);
+        if (user == null || !user.getRol().equalsIgnoreCase("operator")) {
+            return null;
+        }
+        List<Ticket> tickets = ticketIMP.getTicketsByStatusAndCategory(status, categoryId);
+        return tickets.isEmpty() ? null : tickets;
+    }
+
+
 }

@@ -68,4 +68,22 @@ public class TicketView {
         ViewMessages.showInfoMessage(result, "Ticket Update");
     }
 
+    public void showTicketsByStatusAndCategory() {
+        String dni = ViewMessages.showQuestionMessage("Enter your DNI:", "Operator Validation");
+        String status = ViewMessages.showQuestionMessage("Enter ticket status (open, in_progress, closed):", "Filter Tickets");
+        String categoryIdStr = ViewMessages.showQuestionMessage("Enter category ID:", "Filter Tickets");
+        int categoryId = Integer.parseInt(categoryIdStr);
+        List<Ticket> tickets = ticketController.getTicketsByStatusAndCategory(dni, status, categoryId);
+        if (tickets == null || tickets.isEmpty()) {
+            ViewMessages.showInfoMessage("No tickets found with that status and category.", "Filter Tickets");
+            return;
+        }
+        String message = "";
+        for (Ticket t : tickets) {
+            message += t.toString() + "\n\n";
+        }
+        ViewMessages.showInfoMessage(message, "Filtered Tickets");
+    }
+
+
 }

@@ -127,4 +127,33 @@ public class TicketIMP implements TicketRepository {
             return "Error updating ticket status: " + e.getMessage();
         }
     }
+
+    public List<Ticket> getTicketsByStatusAndCategory(String status, int categoryId) {
+        String sql = "SELECT * FROM ticket WHERE status = ? AND category_id = ?";
+        List<Ticket> ticketList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
+            stmt.setString(1, status);
+            stmt.setInt(2, categoryId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ticketList.add(new Ticket(
+                        rs.getInt("ticket_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("status"),
+                        rs.getString("priority"),
+                        rs.getInt("reporter_id"),
+                        rs.getInt("assignee_id"),
+                        rs.getInt("category_id")
+                ));
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try { connection.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        }
+        return ticketList;
+    }
+
 }
