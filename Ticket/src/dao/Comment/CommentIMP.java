@@ -16,7 +16,7 @@ public class CommentIMP implements CommentRepository {
     public List<Comment> getAllComments() {
         List<Comment> comments = new ArrayList<>();
         String query = "SELECT c.comment_id, c.ticket_id, c.user_id, c.content, u.name as user_name " +
-                      "FROM comment c JOIN users u ON c.user_id = u.user_id";
+                      "FROM comment c JOIN user u ON c.user_id = u.user_id";
 
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -67,7 +67,7 @@ public class CommentIMP implements CommentRepository {
     @Override
     public Comment getCommentById(int commentId) {
         String query = "SELECT c.comment_id, c.ticket_id, c.user_id, c.content, u.name as user_name " +
-                      "FROM comment c JOIN users u ON c.user_id = u.user_id " +
+                      "FROM comment c JOIN user u ON c.user_id = u.user_id " +
                       "WHERE c.comment_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

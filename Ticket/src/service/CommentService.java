@@ -35,28 +35,23 @@ public class CommentService {
         try {
             Ticket ticket = ticketRepository.getTicketById(ticketId);
             if (ticket == null) {
-                System.out.println("Error: Ticket does not exist.");
                 return false;
             }
 
             User user = userRepository.getUserByDni(userDni);
             if (user == null) {
-                System.out.println("Error: User does not exist.");
                 return false;
             }
 
             if (content == null || content.trim().isEmpty()) {
-                System.out.println("Error: Comment content cannot be empty.");
                 return false;
             }
 
-            Comment comment = new Comment(ticketId, user.getUser_id(), content.trim());
+            Comment comment = new Comment(ticketId, user.getUser_id(), content);
             commentRepository.createComment(comment);
-            System.out.println("Comment created successfully.");
             return true;
 
         } catch (Exception e) {
-            System.out.println("Error creating comment: " + e.getMessage());
             return false;
         }
     }
