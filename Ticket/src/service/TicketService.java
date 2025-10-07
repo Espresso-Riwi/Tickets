@@ -20,10 +20,11 @@ public class TicketService {
 
     public List<Ticket> getAllTickets() {
         List<Ticket> ticketList = ticketIMP.getAllTickets();
-        return ticketList;
+        return ticketList != null ? ticketList : List.of();
     }
 
     public Ticket getTicketById(int ticketId) {
+        if (ticketId <= 0) return null;
         return ticketIMP.getTicketById(ticketId);
     }
 
@@ -98,28 +99,27 @@ public class TicketService {
 
     public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, String categoryName) {
         if (!Validator.isValidTicketStatus(status)) {
-            return null;
+            return List.of();
         }
-
         List<Ticket> tickets = ticketIMP.getTicketsByStatusAndCategoryName(status, categoryName);
-        return tickets.isEmpty() ? null : tickets;
+        return tickets != null ? tickets : List.of();
     }
 
     public List<Ticket> getTicketsByAssignee(String dni) {
         User assignee = userIMP.getUserByDni(dni);
         if (assignee == null || !assignee.getRol().equalsIgnoreCase("assignee")) {
-            return null;
+            return List.of();
         }
         List<Ticket> tickets = ticketIMP.getTicketsByAssignee(assignee.getUser_id());
-        return tickets.isEmpty() ? null : tickets;
+        return tickets != null ? tickets : List.of();
     }
 
     public List<Category> getTopCategories(String dni) {
         User user = userIMP.getUserByDni(dni);
         if (user == null) {
-            return null;
+            return List.of();
         }
         List<Category> categories = ticketIMP.getTopCategories(3);
-        return categories.isEmpty() ? null : categories;
+        return categories != null ? categories : List.of();
     }
 }
