@@ -24,14 +24,6 @@ public class CommentController {
         return commentService.getCommentsByTicketId(ticketId);
     }
 
-    public Comment getCommentById(int commentId) {
-        if (commentId <= 0) {
-            System.out.println("Error: Invalid comment ID.");
-            return null;
-        }
-        return commentService.getCommentById(commentId);
-    }
-
     public String createComment(int ticketId, String userDni, String content) {
         if (ticketId <= 0) {
             return "Invalid ticket ID.";
@@ -56,22 +48,5 @@ public class CommentController {
         return commentService.createComment(ticketId, userDni.trim(), content.trim());
     }
 
-
-
-    public boolean canUserModifyComment(int commentId, String userDni) {
-        if (commentId <= 0) {
-            return false;
-        }
-
-        if (userDni == null || userDni.trim().isEmpty()) {
-            return false;
-        }
-
-        if (!Validator.isInteger(userDni)) {
-            return false;
-        }
-
-        return commentService.canUserModifyComment(commentId, userDni.trim());
-    }
 
 }

@@ -65,31 +65,6 @@ public class CommentIMP implements CommentRepository {
     }
 
     @Override
-    public Comment getCommentById(int commentId) {
-        String query = "SELECT c.comment_id, c.ticket_id, c.user_id, c.content, u.name as user_name " +
-                      "FROM comment c JOIN user u ON c.user_id = u.user_id " +
-                      "WHERE c.comment_id = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, commentId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Comment(
-                    rs.getInt("comment_id"),
-                    rs.getInt("ticket_id"),
-                    rs.getInt("user_id"),
-                    rs.getString("content"),
-                    rs.getString("user_name")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     public void createComment(Comment comment) {
         String query = "INSERT INTO comment (ticket_id, user_id, content) VALUES (?, ?, ?)";
 

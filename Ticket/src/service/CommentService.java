@@ -27,10 +27,6 @@ public class CommentService {
         return commentRepository.getCommentsByTicketId(ticketId);
     }
 
-    public Comment getCommentById(int commentId) {
-        return commentRepository.getCommentById(commentId);
-    }
-
     public String createComment(int ticketId, String userDni, String content) {
         try {
             Ticket ticket = ticketRepository.getTicketById(ticketId);
@@ -53,22 +49,6 @@ public class CommentService {
 
         } catch (Exception e) {
             return "Error creating comment";
-        }
-    }
-
-
-    public boolean canUserModifyComment(int commentId, String userDni) {
-        try {
-            Comment comment = commentRepository.getCommentById(commentId);
-            User user = userRepository.getUserByDni(userDni);
-
-            if (comment == null || user == null) {
-                return false;
-            }
-
-            return comment.getUserId() == user.getUser_id();
-        } catch (Exception e) {
-            return false;
         }
     }
 }
