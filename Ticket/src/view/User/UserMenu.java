@@ -23,7 +23,6 @@ public class UserMenu {
                 break;
             case "Create user":
                 userView.createUser();
-
                 break;
         }
     }

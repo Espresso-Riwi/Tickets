@@ -43,7 +43,7 @@ public class TicketService {
 
         if (Validator.isValidName(ticket.getTitle())) {
             ticket.setReporterId(user.getUser_id());
-            ticket.setCategoryId(categoryId); // Asignar el ID encontrado
+            ticket.setCategoryId(categoryId);
             System.out.println(user.getUser_id());
             ticketIMP.createTicket(ticket);
             return "Ticket created successfully";
@@ -97,8 +97,6 @@ public class TicketService {
     }
 
     public List<Ticket> getTicketsByStatusAndCategory(String dni, String status, String categoryName) {
-        User user = userIMP.getUserByDni(dni);
-
         if (!Validator.isValidTicketStatus(status)) {
             return null;
         }

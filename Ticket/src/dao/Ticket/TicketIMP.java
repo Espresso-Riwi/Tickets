@@ -241,7 +241,7 @@ public class TicketIMP implements TicketRepository {
                 return rs.getInt("category_id");
             } else {
                 connection.commit();
-                return null; // Category not found
+                return null;
             }
         } catch (SQLException e) {
             try {
