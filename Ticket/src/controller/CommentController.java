@@ -32,30 +32,25 @@ public class CommentController {
         return commentService.getCommentById(commentId);
     }
 
-    public boolean createComment(int ticketId, String userDni, String content) {
+    public String createComment(int ticketId, String userDni, String content) {
         if (ticketId <= 0) {
-            System.out.println("Error: Invalid ticket ID.");
-            return false;
+            return "Invalid ticket ID.";
         }
 
         if (userDni == null || userDni.trim().isEmpty()) {
-            System.out.println("Error: User DNI cannot be empty.");
-            return false;
+            return "User DNI cannot be empty";
         }
 
         if (!Validator.isInteger(userDni)) {
-            System.out.println("Error: Invalid DNI format.");
-            return false;
+            return "Invalid DNI format";
         }
 
         if (content == null || content.trim().isEmpty()) {
-            System.out.println("Error: Comment content cannot be empty.");
-            return false;
+            return "Comment content cannot be empty";
         }
 
         if (content.trim().length() > 500) {
-            System.out.println("Error: Comment content is too long (max 500 characters).");
-            return false;
+            return "Comment content is too long (max 500 characters).";
         }
 
         return commentService.createComment(ticketId, userDni.trim(), content.trim());

@@ -31,28 +31,28 @@ public class CommentService {
         return commentRepository.getCommentById(commentId);
     }
 
-    public boolean createComment(int ticketId, String userDni, String content) {
+    public String createComment(int ticketId, String userDni, String content) {
         try {
             Ticket ticket = ticketRepository.getTicketById(ticketId);
             if (ticket == null) {
-                return false;
+                return "Ticket does not exist.";
             }
 
             User user = userRepository.getUserByDni(userDni);
             if (user == null) {
-                return false;
+                return "User does not exist.";
             }
 
             if (content == null || content.trim().isEmpty()) {
-                return false;
+                return "Comment content cannot be empty.";
             }
 
-            Comment comment = new Comment(ticketId, user.getUser_id(), content);
+            Comment comment = new Comment(ticketId, user.getUser_id(), content.trim());
             commentRepository.createComment(comment);
-            return true;
+            return "User created correctly";
 
         } catch (Exception e) {
-            return false;
+            return "Error creating comment";
         }
     }
 

@@ -47,12 +47,9 @@ public class CommentView {
 
         try {
             int ticketId = Integer.parseInt(ticketIdStr);
-            boolean success = commentController.createComment(ticketId, userDni, content);
-            if (success) {
-                ViewMessages.showInfoMessage("Comment created successfully.", "Success");
-            } else {
-                ViewMessages.showInfoMessage("Could not create comment. Please verify the data.", "Error");
-            }
+            String success = commentController.createComment(ticketId, userDni, content);
+
+            ViewMessages.showInfoMessage(success, "Result");
         } catch (NumberFormatException e) {
             ViewMessages.showInfoMessage("Invalid ticket ID.", "Error");
         }
