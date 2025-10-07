@@ -41,7 +41,7 @@ public class CommentIMP implements CommentRepository {
     public List<Comment> getCommentsByTicketId(int ticketId) {
         List<Comment> comments = new ArrayList<>();
         String query = "SELECT c.comment_id, c.ticket_id, c.user_id, c.content, u.name as user_name " +
-                      "FROM comment c JOIN users u ON c.user_id = u.user_id " +
+                      "FROM comment c JOIN user u ON c.user_id = u.user_id " +
                       "WHERE c.ticket_id = ? ORDER BY c.comment_id ASC";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
