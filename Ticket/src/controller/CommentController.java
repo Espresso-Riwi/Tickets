@@ -61,32 +61,7 @@ public class CommentController {
         return commentService.createComment(ticketId, userDni.trim(), content.trim());
     }
 
-    public boolean updateComment(int commentId, String newContent) {
-        if (commentId <= 0) {
-            System.out.println("Error: Invalid comment ID.");
-            return false;
-        }
 
-        if (newContent == null || newContent.trim().isEmpty()) {
-            System.out.println("Error: Comment content cannot be empty.");
-            return false;
-        }
-
-        if (newContent.trim().length() > 500) {
-            System.out.println("Error: Comment content is too long (max 500 characters).");
-            return false;
-        }
-
-        return commentService.updateComment(commentId, newContent.trim());
-    }
-
-    public boolean deleteComment(int commentId) {
-        if (commentId <= 0) {
-            System.out.println("Error: Invalid comment ID.");
-            return false;
-        }
-        return commentService.deleteComment(commentId);
-    }
 
     public boolean canUserModifyComment(int commentId, String userDni) {
         if (commentId <= 0) {
@@ -104,11 +79,4 @@ public class CommentController {
         return commentService.canUserModifyComment(commentId, userDni.trim());
     }
 
-    public void deleteCommentsByTicketId(int ticketId) {
-        if (ticketId <= 0) {
-            System.out.println("Error: Invalid ticket ID.");
-            return;
-        }
-        commentService.deleteCommentsByTicketId(ticketId);
-    }
 }

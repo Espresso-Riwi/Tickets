@@ -102,41 +102,4 @@ public class CommentIMP implements CommentRepository {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void updateComment(Comment comment) {
-        String query = "UPDATE comment SET content = ? WHERE comment_id = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, comment.getContent());
-            stmt.setInt(2, comment.getCommentId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void deleteComment(int commentId) {
-        String query = "DELETE FROM comment WHERE comment_id = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, commentId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void deleteCommentsByTicketId(int ticketId) {
-        String query = "DELETE FROM comment WHERE ticket_id = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, ticketId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

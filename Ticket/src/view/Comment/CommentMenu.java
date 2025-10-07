@@ -10,7 +10,7 @@ public class CommentMenu {
     }
 
     public void commentMenu() {
-        String[] options = {"All comments", "Comments by ticket", "Create comment", "Update comment", "Delete comment"};
+        String[] options = {"All comments", "Comments by ticket", "Create comment"};
         String option = JOptionPane.showInputDialog(null, "Choose an option", "Comment menu", JOptionPane.QUESTION_MESSAGE, null, options, options[0]).toString();
 
         switch (option) {
@@ -22,12 +22,6 @@ public class CommentMenu {
                 break;
             case "Create comment":
                 commentView.createCommentInput();
-                break;
-            case "Update comment":
-                commentView.updateComment();
-                break;
-            case "Delete comment":
-                commentView.deleteComment();
                 break;
         }
     }

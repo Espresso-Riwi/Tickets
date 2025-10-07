@@ -61,47 +61,6 @@ public class CommentService {
         }
     }
 
-    public boolean updateComment(int commentId, String newContent) {
-        try {
-            Comment existingComment = commentRepository.getCommentById(commentId);
-            if (existingComment == null) {
-                System.out.println("Error: Comment does not exist.");
-                return false;
-            }
-
-            if (newContent == null || newContent.trim().isEmpty()) {
-                System.out.println("Error: Comment content cannot be empty.");
-                return false;
-            }
-
-            existingComment.setContent(newContent.trim());
-            commentRepository.updateComment(existingComment);
-            System.out.println("Comment updated successfully.");
-            return true;
-
-        } catch (Exception e) {
-            System.out.println("Error updating comment: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public boolean deleteComment(int commentId) {
-        try {
-            Comment comment = commentRepository.getCommentById(commentId);
-            if (comment == null) {
-                System.out.println("Error: Comment does not exist.");
-                return false;
-            }
-
-            commentRepository.deleteComment(commentId);
-            System.out.println("Comment deleted successfully.");
-            return true;
-
-        } catch (Exception e) {
-            System.out.println("Error deleting comment: " + e.getMessage());
-            return false;
-        }
-    }
 
     public boolean canUserModifyComment(int commentId, String userDni) {
         try {
@@ -116,9 +75,5 @@ public class CommentService {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public void deleteCommentsByTicketId(int ticketId) {
-        commentRepository.deleteCommentsByTicketId(ticketId);
     }
 }
